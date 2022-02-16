@@ -1,0 +1,458 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a simple to-do list api.",
+    "version": "1.0.0",
+    "title": "GSR (get-shit-ready) list app",
+    "termsOfService": "http://swagger.io/terms/",
+    "contact": {
+      "email": "ichwill@keinemail.de"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "127.0.0.1",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "list",
+      "description": "All the shit you have to do",
+      "externalDocs": {
+        "description": "Find out more",
+        "url": "http://swagger.io"
+      }
+    },
+    {
+      "name": "entry",
+      "description": "Access to GSR Lists"
+    },
+    {
+      "name": "user",
+      "description": "Operations about user",
+      "externalDocs": {
+        "description": "Find out more about our store",
+        "url": "http://swagger.io"
+      }
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "paths": {
+    "/list": {
+      "post": {
+        "tags": [
+          "list"
+        ],
+        "summary": "Create a list",
+        "description": "",
+        "operationId": "addList",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List object that needs to be added",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/List"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Glück gehabt"
+          },
+          "500": {
+            "description": "Pech gehabt"
+          }
+        }
+      }
+    },
+    "/list/{list_id}": {
+      "get": {
+        "tags": [
+          "list"
+        ],
+        "summary": "Find list by ID",
+        "description": "Returns a single list",
+        "operationId": "getListById",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "List object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/List"
+            }
+          },
+          {
+            "name": "list_id",
+            "in": "path",
+            "description": "ID of list to return",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Glück gehabt",
+            "schema": {
+              "$ref": "#/definitions/List"
+            }
+          },
+          "400": {
+            "description": "Ungültige ID"
+          },
+          "404": {
+            "description": "Diese Liste kenn ich nicht"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "list"
+        ],
+        "summary": "Deletes a list",
+        "description": "",
+        "operationId": "deleteList",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "api_key",
+            "in": "header",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "list_id",
+            "in": "path",
+            "description": "List to delete",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Glück gehabt"
+          },
+          "404": {
+            "description": "Diese Liste kenn ich nicht"
+          }
+        }
+      }
+    },
+    "/list/{list_id}/entry": {
+      "post": {
+        "tags": [
+          "entry"
+        ],
+        "summary": "Adds an entry to an existing list",
+        "description": "",
+        "operationId": "addEntryToList",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "description": "ID of list that needs to be updated",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Glück gehabt"
+          },
+          "500": {
+            "description": "Pech gehabt"
+          }
+        }
+      }
+    },
+    "/list/{list_id}/entry/{entry_id}": {
+      "post": {
+        "tags": [
+          "entry"
+        ],
+        "summary": "Updates existing entry.",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "updateEntry",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "list_id",
+            "in": "path",
+            "description": "ID of list that needs to be shown",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          },
+          {
+            "name": "entry_id",
+            "in": "path",
+            "description": "ID of entry that needs to be shown",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "entry"
+        ],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "deleteEntry",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "entry_id",
+            "in": "path",
+            "description": "The entry that needs to be deleted",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "list_id",
+            "in": "path",
+            "description": "ID of list that needs to be shown",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Glück gehabt"
+          },
+          "404": {
+            "description": "Eintrag nicht gefunden"
+          }
+        }
+      }
+    },
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Create user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "createUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Created user object",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Glück gehabt"
+          },
+          "500": {
+            "description": "Pech gehabt"
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Show all users",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "showUsers",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Listed user objects",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "default": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/user/{user_id}": {
+      "delete": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Delete user",
+        "description": "This can only be done by the logged in user.",
+        "operationId": "deleteUser",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "description": "The user that needs to be deleted",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "f u"
+          },
+          "404": {
+            "description": "User not found"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  },
+  "definitions": {
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "username": {
+          "type": "string"
+        },
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        },
+        "userStatus": {
+          "type": "integer",
+          "format": "int32",
+          "description": "User Status"
+        }
+      },
+      "xml": {
+        "name": "User"
+      }
+    },
+    "Entry": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "entryStatus": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Entry Status"
+        }
+      },
+      "xml": {
+        "name": "Entry"
+      }
+    },
+    "List": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string",
+          "example": "Einkaufsliste"
+        }
+      },
+      "xml": {
+        "name": "List"
+      }
+    },
+    "ApiResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "type": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about Swagger",
+    "url": "http://swagger.io"
+  }
+}
