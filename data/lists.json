@@ -1,0 +1,10 @@
+"lists" : [
+        {
+            'id' : 0,
+            'name' : 'Einkaufsliste',
+        },
+        {
+            'id' : 1,
+            'name' : 'To-Do Liste',
+        },
+    ]
